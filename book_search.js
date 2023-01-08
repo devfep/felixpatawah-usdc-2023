@@ -221,11 +221,6 @@ const multipleInstancesOfSearchTermExpectedOutput = {
       Page: 6,
       Line: 21,
     },
-    {
-      ISBN: "9781401323257",
-      Page: 6,
-      Line: 21,
-    },
   ],
 };
 
