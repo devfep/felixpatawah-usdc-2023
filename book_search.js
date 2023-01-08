@@ -22,7 +22,7 @@
     /** You will need to implement your search and 
      * return the appropriate object here. */
 
-    var result = {
+    const result = {
         "SearchTerm": "",
         "Results": []
     };
@@ -31,7 +31,7 @@
 }
 
 /** Example input object. */
-const twentyLeaguesIn = [
+const singleBookWithContentInput = [
     {
         "Title": "Twenty Thousand Leagues Under the Sea",
         "ISBN": "9780000528531",
@@ -54,15 +54,150 @@ const twentyLeaguesIn = [
         ] 
     }
 ]
+
+const singleBookWithoutContentInput = [
+    {
+        "Title": "Twenty Thousand Leagues Under the Sea",
+        "ISBN": "9780000528531",
+        "Content": []
+    }
+]
+
+
+const multipleBooksWithContentInput = [
+    {
+        "Title": "Twenty Thousand Leagues Under the Sea",
+        "ISBN": "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "now simply went on by her own momentum.  The dark-"
+            },
+            {
+                "Page": 31,
+                "Line": 9,
+                "Text": "ness was then profound; and however good the Canadian\'s"
+            },
+            {
+                "Page": 31,
+                "Line": 10,
+                "Text": "eyes were, I asked myself how he had managed to see, and"
+            } 
+            ]
+    },
+    {
+        "Title": "The Last Lecture",
+        "ISBN": "9781401323257",
+        "Content": [
+            {
+                "Page": 6,
+                "Line": 20,
+                "Text": "Another matter upsetting Jai: To give the talk as sched-"
+            },
+            {
+                "Page": 6,
+                "Line": 21,
+                "Text": "uled, I would have to fly to Pittsburgh the day before, which"
+            },
+            {
+                "Page": 6,
+                "Line": 22,
+                "Text": `was Jai's forty-first birthday. "This is my last birthday we'll`
+            } 
+        ] 
+    }
+]
+
+const noBookInput = [];
     
 /** Example output object */
-const twentyLeaguesOut = {
+const singleBookWithContentExpectedOutput = {
     "SearchTerm": "the",
     "Results": [
         {
             "ISBN": "9780000528531",
             "Page": 31,
             "Line": 9
+        }
+    ]
+}
+
+const singleBookWithoutContentExpectedOutput = {
+    "SearchTerm": "the",
+    "Results": []
+}
+
+const multipleBooksWithContentExpectedOutput = {
+    "SearchTerm": "the",
+    "Results": [
+        {
+            "ISBN": "9780000528531",
+            "Page": 31,
+            "Line": 9
+        }, 
+        {
+            "ISBN": "9781401323257",
+            "Page": 6,
+            "Line": 20
+        },
+        {
+            "ISBN": "9781401323257",
+            "Page": 6,
+            "Line": 21
+        }
+    ]
+}
+
+const noBookExpectedOutput = {
+    "SearchTerm": "the",
+    "Results": []
+}
+
+const searchTermNotFoundExpectedOutput = {
+    "SearchTerm": "Felix",
+    "Results": []
+}
+
+const multipleInstancesOfSearchTermExpectedOutput = {
+    "SearchTerm": "to",
+    "Results": [
+        {
+            "ISBN": "9780000528531",
+            "Page": 31,
+            "Line": 10
+        }, 
+        {
+            "ISBN": "9781401323257",
+            "Page": 6,
+            "Line": 21
+        }, 
+        {
+            "ISBN": "9781401323257",
+            "Page": 6,
+            "Line": 21
+        }
+    ]
+}
+
+const searchTermWrappingOnDifferentLinesExpectedOutput = {
+    "SearchTerm": "darkness",
+    "Results": [
+        {
+            "ISBN": "9780000528531",
+            "Page": 31,
+            "Line": 9
+        }
+    ]
+}
+
+const hyphenatedSearchTermExpectedOutput = {
+    "SearchTerm": "forty-first",
+    "Results": [
+        {
+            "ISBN": "9781401323257",
+            "Page": 6,
+            "Line": 22
         }
     ]
 }
@@ -83,22 +218,73 @@ const twentyLeaguesOut = {
  * Please add your unit tests below.
  * */
 
-/** We can check that, given a known input, we get a known output. */
-const test1result = findSearchTermInBooks("the", twentyLeaguesIn);
-if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
-    console.log("PASS: Test 1");
-} else {
-    console.log("FAIL: Test 1");
-    console.log("Expected:", twentyLeaguesOut);
-    console.log("Received:", test1result);
+
+/******* HELPER FUNCTIONS *******/
+
+const resultsLengthChecker = (testNumber, expected, received, logText) => {
+    if (expected.Results.length === received.Results.length) {
+        console.log(`PASS - Test ${testNumber}: Expected results length EQUAL to Received results length -  ${logText}`);
+        console.log("Expected:", expected.Results.length);
+        console.log("Received:", received.Results.length);
+    } else {
+        console.log(`FAIL - Test ${testNumber}: Expected results length NOT EQUAL to Received results length  -  ${logText}`);
+        console.log("Expected:", expected.Results.length);
+        console.log("Received:", received.Results.length);
+    } 
 }
 
-/** We could choose to check that we get the right number of results. */
-const test2result = findSearchTermInBooks("the", twentyLeaguesIn); 
-if (test2result.Results.length == 1) {
-    console.log("PASS: Test 2");
-} else {
-    console.log("FAIL: Test 2");
-    console.log("Expected:", twentyLeaguesOut.Results.length);
-    console.log("Received:", test2result.Results.length);
+const jsonMatcher = (testNumber, expected, received, logText) => {
+    if (JSON.stringify(expected) === JSON.stringify(received)) {
+        console.log(`PASS - Test ${testNumber}: Expected output is EQUAL to Received output -  ${logText}`);
+    } else {
+        console.log(`FAIL - Test ${testNumber}: Expected output is NOT EQUAL to Received output -  ${logText}`);
+        console.log("Expected:", JSON.stringify(expected));
+        console.log("Received:", JSON.stringify(received));
+    }
 }
+
+
+/******* HELPER FUNCTIONS *******/
+
+/** We can check that, given a known input, we get a known output. */
+const test1result = findSearchTermInBooks("the", singleBookWithContentInput);
+jsonMatcher(1, singleBookWithContentExpectedOutput, test1result, `Search term, "${singleBookWithContentExpectedOutput.SearchTerm}", yielded the ${JSON.stringify(singleBookWithContentExpectedOutput) === JSON.stringify(test1result) ? "CORRECT" : "WRONG"} expected output`)
+
+/** We could choose to check that we get the right number of results. */
+//givenABookWithContentsAndSearchTerm_whenSearchTermFound_thenReturnNonEmptyResultsArray
+const test2result = findSearchTermInBooks("the", singleBookWithContentInput); 
+resultsLengthChecker(2, singleBookWithContentExpectedOutput, test2result, 
+    `Search term, "${singleBookWithContentExpectedOutput.SearchTerm}", should occur ${singleBookWithContentExpectedOutput.Results.length <= 1 ? singleBookWithContentExpectedOutput.Results.length + " time" 
+    : singleBookWithContentExpectedOutput.Results.length + " times"} in your output`);
+
+
+//givenABookWithContentsAndSearchTerm_whenSearchTermNotFound_thenReturnEmptyResultsArrayWithSearchTerm
+const test3result = findSearchTermInBooks("Felix", singleBookWithContentInput);
+jsonMatcher(3, searchTermNotFoundExpectedOutput, test3result, `Search term, "${searchTermNotFoundExpectedOutput.SearchTerm}", yielded the ${JSON.stringify(searchTermNotFoundExpectedOutput) === JSON.stringify(test3result) ? "CORRECT" : "WRONG"} expected output`);
+
+
+//givenNoBookAndSearchTerm_whenSearchTermNotFound_thenReturnEmptyResultsArrayWithSearchTermProperty
+const test4result = findSearchTermInBooks("the", noBookInput);
+jsonMatcher(4, noBookExpectedOutput, test4result, `Search term, "${noBookExpectedOutput.SearchTerm}", yielded the ${JSON.stringify(noBookExpectedOutput) === JSON.stringify(test4result) ? "CORRECT" : "WRONG"} expected output`)
+
+
+//givenMultipleBooksWithContentsAndSearchTerm_whenSearchTermFound_thenReturnNonEmptyResultsArray
+const test5result = findSearchTermInBooks("to", multipleBooksWithContentInput);
+jsonMatcher(5, multipleInstancesOfSearchTermExpectedOutput, test5result, `Search term, "${multipleInstancesOfSearchTermExpectedOutput.SearchTerm}", yielded the ${JSON.stringify(multipleInstancesOfSearchTermExpectedOutput) === JSON.stringify(test5result) ? "CORRECT" : "WRONG"} expected output`)
+
+resultsLengthChecker(5, multipleInstancesOfSearchTermExpectedOutput, test5result, `Search term, "${multipleInstancesOfSearchTermExpectedOutput.SearchTerm}", should occur ${multipleInstancesOfSearchTermExpectedOutput.Results.length <= 1 ? multipleInstancesOfSearchTermExpectedOutput.Results.length + " time" 
+: multipleInstancesOfSearchTermExpectedOutput.Results.length + " times"} in your output`)
+
+//givenMultipleBooksWithContentAndSearchTerm_whenWordBreakSearchTermFound_thenReturnNonEmptyResultsArray
+const test6result = findSearchTermInBooks("darkness", multipleBooksWithContentInput);
+jsonMatcher(6, searchTermWrappingOnDifferentLinesExpectedOutput, test6result, `Search term, "${searchTermWrappingOnDifferentLinesExpectedOutput.SearchTerm}", yielded the ${JSON.stringify(searchTermWrappingOnDifferentLinesExpectedOutput) === JSON.stringify(test6result) ? "CORRECT" : "WRONG"} expected output`)
+
+resultsLengthChecker(6, searchTermWrappingOnDifferentLinesExpectedOutput, test6result, `Search term, "${searchTermWrappingOnDifferentLinesExpectedOutput.SearchTerm}", should occur ${searchTermWrappingOnDifferentLinesExpectedOutput.Results.length <= 1 ? searchTermWrappingOnDifferentLinesExpectedOutput.Results.length + " time" 
+: searchTermWrappingOnDifferentLinesExpectedOutput.Results.length + " times"} in your output`)
+
+//givenMultipleBooksWithContentAndHyphenatedSearchTerm_whenSearchTermFound_thenReturnNonEmptyResultsArray
+const test7result = findSearchTermInBooks("forty-first", multipleBooksWithContentInput);
+jsonMatcher(7, hyphenatedSearchTermExpectedOutput, test7result, `Search term, "${hyphenatedSearchTermExpectedOutput.SearchTerm}", yielded the ${JSON.stringify(hyphenatedSearchTermExpectedOutput) === JSON.stringify(test7result) ? "CORRECT" : "WRONG"} expected output`)
+
+resultsLengthChecker(7, hyphenatedSearchTermExpectedOutput, test7result, `Search term, "${hyphenatedSearchTermExpectedOutput.SearchTerm}", should occur ${hyphenatedSearchTermExpectedOutput.Results.length <= 1 ? hyphenatedSearchTermExpectedOutput.Results.length + " time" 
+: hyphenatedSearchTermExpectedOutput.Results.length + " times"} in your output`)
