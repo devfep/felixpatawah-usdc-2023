@@ -198,6 +198,17 @@ const multipleBooksWithContentExpectedOutput = {
   ],
 };
 
+const caseSensitiveSearchTermExpectedOutput = {
+  SearchTerm: "This",
+  Results: [
+    {
+      ISBN: "9781401323257",
+      Page: 6,
+      Line: 22,
+    },
+  ],
+};
+
 const noBookExpectedOutput = {
   SearchTerm: "the",
   Results: [],
@@ -447,5 +458,37 @@ resultsLengthChecker(
     hyphenatedSearchTermExpectedOutput.Results.length <= 1
       ? hyphenatedSearchTermExpectedOutput.Results.length + " time"
       : hyphenatedSearchTermExpectedOutput.Results.length + " times"
+  } in your output`
+);
+
+//givenMultipleBooksWithContentAndCapitalizedSearchTerm_whenSearchTermFound_thenReturnNonEmptyResultsArray
+const test8result = findSearchTermInBooks(
+  "This",
+  multipleBooksWithContentInput
+);
+jsonMatcher(
+  8,
+  caseSensitiveSearchTermExpectedOutput,
+  test8result,
+  `Search term, "${
+    caseSensitiveSearchTermExpectedOutput.SearchTerm
+  }", yielded the ${
+    JSON.stringify(caseSensitiveSearchTermExpectedOutput) ===
+    JSON.stringify(test8result)
+      ? "CORRECT"
+      : "WRONG"
+  } expected output`
+);
+
+resultsLengthChecker(
+  8,
+  caseSensitiveSearchTermExpectedOutput,
+  test8result,
+  `Search term, "${
+    caseSensitiveSearchTermExpectedOutput.SearchTerm
+  }", should occur ${
+    caseSensitiveSearchTermExpectedOutput.Results.length <= 1
+      ? caseSensitiveSearchTermExpectedOutput.Results.length + " time"
+      : caseSensitiveSearchTermExpectedOutput.Results.length + " times"
   } in your output`
 );
