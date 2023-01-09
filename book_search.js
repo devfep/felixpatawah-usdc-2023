@@ -21,10 +21,9 @@
 function findSearchTermInBooks(searchTerm, scannedTextObj) {
   /** You will need to implement your search and
    * return the appropriate object here. */
-
   const result = {
-    SearchTerm: "",
-    Results: [],
+    "SearchTerm": "",
+    "Results": []
   };
 
   result.SearchTerm = searchTerm;
@@ -32,7 +31,7 @@ function findSearchTermInBooks(searchTerm, scannedTextObj) {
   if (scannedTextObj.length === 0) return result;
 
   scannedTextObj.forEach((book) => {
-    if (book.Content.length === 0) return result;
+    if (book.Content.length === 0) return;
 
     let checkFirstWord = false;
     let wordBreak = "";
@@ -55,8 +54,8 @@ function findSearchTermInBooks(searchTerm, scannedTextObj) {
             solution = {
               ISBN: `${book.ISBN}`,
               Page: Number.parseInt(`${lineOfText.Page}`),
-              Line: Number.parseInt(`${lineOfText.Line}`),
-            },
+              Line: Number.parseInt(`${lineOfText.Line}`)
+            }
           } = book;
           result.Results.push(solution);
         }
@@ -67,10 +66,10 @@ function findSearchTermInBooks(searchTerm, scannedTextObj) {
       if (lineOfText.Text.includes(searchTerm) && !lastWord.endsWith("-")) {
         const {
           solution = {
-            ISBN: `${book.ISBN}`,
-            Page: Number.parseInt(`${lineOfText.Page}`),
-            Line: Number.parseInt(`${lineOfText.Line}`),
-          },
+            "ISBN": `${book.ISBN}`,
+            "Page": Number.parseInt(`${lineOfText.Page}`),
+            "Line": Number.parseInt(`${lineOfText.Line}`)
+          }
         } = book;
         result.Results.push(solution);
       }
@@ -83,178 +82,179 @@ function findSearchTermInBooks(searchTerm, scannedTextObj) {
 /** Example input object. */
 const singleBookWithContentInput = [
   {
-    Title: "Twenty Thousand Leagues Under the Sea",
-    ISBN: "9780000528531",
-    Content: [
+    "Title": "Twenty Thousand Leagues Under the Sea",
+    "ISBN": "9780000528531",
+    "Content": [
       {
-        Page: 31,
-        Line: 8,
-        Text: "now simply went on by her own momentum.  The dark-",
+        "Page": 31,
+        "Line": 8,
+        "Text": "now simply went on by her own momentum.  The dark-"
       },
       {
-        Page: 31,
-        Line: 9,
-        Text: "ness was then profound; and however good the Canadian's",
+        "Page": 31,
+        "Line": 9,
+        "Text": "ness was then profound; and however good the Canadian's"
       },
       {
-        Page: 31,
-        Line: 10,
-        Text: "eyes were, I asked myself how he had managed to see, and",
-      },
-    ],
-  },
+        "Page": 31,
+        "Line": 10,
+        "Text": "eyes were, I asked myself how he had managed to see, and"
+      }
+    ]
+  }
 ];
 
 const singleBookWithoutContentInput = [
   {
-    Title: "Twenty Thousand Leagues Under the Sea",
-    ISBN: "9780000528531",
-    Content: [],
-  },
+    "Title": "Twenty Thousand Leagues Under the Sea",
+    "ISBN": "9780000528531",
+    "Content": []
+  }
 ];
 
 const multipleBooksWithContentInput = [
   {
-    Title: "Twenty Thousand Leagues Under the Sea",
-    ISBN: "9780000528531",
-    Content: [
+    "Title": "Twenty Thousand Leagues Under the Sea",
+    "ISBN": "9780000528531",
+    "Content": [
       {
-        Page: 31,
-        Line: 8,
-        Text: "now simply went on by her own momentum.  The dark-",
+        "Page": 31,
+        "Line": 8,
+        "Text": "now simply went on by her own momentum.  The dark-"
       },
       {
-        Page: 31,
-        Line: 9,
-        Text: "ness was then profound; and however good the Canadian's",
+        "Page": 31,
+        "Line": 9,
+        "Text": "ness was then profound; and however good the Canadian's"
       },
       {
-        Page: 31,
-        Line: 10,
-        Text: "eyes were, I asked myself how he had managed to see, and",
-      },
-    ],
+        "Page": 31,
+        "Line": 10,
+        "Text": "eyes were, I asked myself how he had managed to see, and"
+      }
+    ]
   },
   {
-    Title: "The Last Lecture",
-    ISBN: "9781401323257",
-    Content: [
+    "Title": "The Last Lecture",
+    "ISBN": "9781401323257",
+    "Content": [
       {
-        Page: 6,
-        Line: 20,
-        Text: "Another matter upsetting Jai: To give the talk as sched-",
+        "Page": 6,
+        "Line": 20,
+        "Text": "Another matter upsetting Jai: To give the talk as sched-"
       },
       {
-        Page: 6,
-        Line: 21,
-        Text: "uled, I would have to fly to Pittsburgh the day before, which",
+        "Page": 6,
+        "Line": 21,
+        "Text": "uled, I would have to fly to Pittsburgh the day before, which"
       },
       {
-        Page: 6,
-        Line: 22,
-        Text: `was Jai's forty-first birthday. "This is my last birthday we'll`,
-      },
-    ],
-  },
+        "Page": 6,
+        "Line": 22,
+        "Text": `was Jai's forty-first birthday. "This is my last birthday we'll`
+      }
+    ]
+  }
 ];
 
 const noBookInput = [];
 
 /** Example output object */
+//Output
 const singleBookWithContentExpectedOutput = {
-  SearchTerm: "the",
-  Results: [
+  "SearchTerm": "the",
+  "Results": [
     {
-      ISBN: "9780000528531",
-      Page: 31,
-      Line: 9,
-    },
-  ],
+      "ISBN": "9780000528531",
+      "Page": 31,
+      "Line": 9
+    }
+  ]
 };
 
 const singleBookWithoutContentExpectedOutput = {
-  SearchTerm: "the",
-  Results: [],
+  "SearchTerm": "the",
+  "Results": []
 };
 
 const multipleBooksWithContentExpectedOutput = {
-  SearchTerm: "the",
-  Results: [
+  "SearchTerm": "the",
+  "Results": [
     {
-      ISBN: "9780000528531",
-      Page: 31,
-      Line: 9,
+      "ISBN": "9780000528531",
+      "Page": 31,
+      "Line": 9
     },
     {
-      ISBN: "9781401323257",
-      Page: 6,
-      Line: 20,
+      "ISBN": "9781401323257",
+      "Page": 6,
+      "Line": 20
     },
     {
-      ISBN: "9781401323257",
-      Page: 6,
-      Line: 21,
-    },
-  ],
+      "ISBN": "9781401323257",
+      "Page": 6,
+      "Line": 21
+    }
+  ]
 };
 
 const caseSensitiveSearchTermExpectedOutput = {
-  SearchTerm: "This",
-  Results: [
+  "SearchTerm": "This",
+  "Results": [
     {
-      ISBN: "9781401323257",
-      Page: 6,
-      Line: 22,
-    },
-  ],
+      "ISBN": "9781401323257",
+      "Page": 6,
+      "Line": 22
+    }
+  ]
 };
 
 const noBookExpectedOutput = {
-  SearchTerm: "the",
-  Results: [],
+  "SearchTerm": "the",
+  "Results": []
 };
 
 const searchTermNotFoundExpectedOutput = {
-  SearchTerm: "Felix",
-  Results: [],
+  "SearchTerm": "Felix",
+  "Results": []
 };
 
 const multipleInstancesOfSearchTermExpectedOutput = {
-  SearchTerm: "to",
-  Results: [
+  "SearchTerm": "to",
+  "Results": [
     {
-      ISBN: "9780000528531",
-      Page: 31,
-      Line: 10,
+      "ISBN": "9780000528531",
+      "Page": 31,
+      "Line": 10
     },
     {
-      ISBN: "9781401323257",
-      Page: 6,
-      Line: 21,
-    },
-  ],
+      "ISBN": "9781401323257",
+      "Page": 6,
+      "Line": 21
+    }
+  ]
 };
 
 const searchTermWrappingOnDifferentLinesExpectedOutput = {
-  SearchTerm: "darkness",
-  Results: [
+  "SearchTerm": "darkness",
+  "Results": [
     {
-      ISBN: "9780000528531",
-      Page: 31,
-      Line: 9,
-    },
-  ],
+      "ISBN": "9780000528531",
+      "Page": 31,
+      "Line": 9
+    }
+  ]
 };
 
 const hyphenatedSearchTermExpectedOutput = {
-  SearchTerm: "forty-first",
-  Results: [
+  "SearchTerm": "forty-first",
+  "Results": [
     {
-      ISBN: "9781401323257",
-      Page: 6,
-      Line: 22,
-    },
-  ],
+      "ISBN": "9781401323257",
+      "Page": 6,
+      "Line": 22
+    }
+  ]
 };
 
 /*
