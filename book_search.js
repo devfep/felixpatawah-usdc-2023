@@ -66,9 +66,9 @@ function findSearchTermInBooks(searchTerm, scannedTextObj) {
       if (lineOfText.Text.includes(searchTerm) && !lastWord.endsWith("-")) {
         const {
           solution = {
-            "ISBN": `${book.ISBN}`,
-            "Page": Number.parseInt(`${lineOfText.Page}`),
-            "Line": Number.parseInt(`${lineOfText.Line}`)
+            "ISBN": book.ISBN,
+            "Page": lineOfText.Page,
+            "Line": lineOfText.Line
           }
         } = book;
         result.Results.push(solution);
